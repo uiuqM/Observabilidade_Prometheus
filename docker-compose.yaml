@@ -40,10 +40,7 @@ services:
       - redis-forum-api
 
   app-forum-api:
-    build:
-      context: ./app/
-      dockerfile: Dockerfile
-    image: app-forum-api
+    image: uiuq/app-forum-api-alura:0.1
     container_name: app-forum-api
     restart: unless-stopped
     networks:
@@ -94,6 +91,19 @@ services:
       - api
     depends_on:
       - proxy-forum-api
+
+  grafana-forum-api:
+    image: grafana/grafana
+    container_name: grafana-forum-api
+    volumes:
+      - ./grafana:/var/lib/grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    networks:
+      - monit
+    depends_on:
+      - prometheus-forum-api
 
   client-forum-api:
     build:
